@@ -1,15 +1,15 @@
 import sys
-import pathlib
+from pathlib import Path
 from datetime import date
 import pandas as pd
 
-FILE_PATH = pathlib.Path("data.csv")
+FILE_PATH = Path("data.csv")
 
-# Fileexistence check
+# Fileexistence check and file empty check
 def initialize_csv():
-    if not FILE_PATH.is_file():
+    if not FILE_PATH.is_file() or FILE_PATH.stat().st_size == 0:
         df = pd.DataFrame(columns=["account", "money", "date"])
-        df.to_csv(FILE_PATH, index=False)
+        df.to_csv(FILE_PATH, header=True, index=False)
 
 # Add new entry
 def add_money(amount):
