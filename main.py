@@ -1,4 +1,4 @@
-import sys
+import argparse
 from pathlib import Path
 from datetime import date
 import pandas as pd
@@ -26,18 +26,22 @@ def add_money(amount, description):
     df.to_csv(FILE_PATH, mode="a", header=False, index=False)
     print(f"Added: \n{df}")
 
+parser = argparse.ArgumentParser()
 
-# arguments check: python3 main.py <mode> <amount>
-if len(sys.argv) < 3:
-    print("Error: not enough arguments", file=sys.stderr)
-    sys.exit(1)
+subparsers = parser.add_subparsers(dest="command")
 
-mode = sys.argv[1]
-amount = sys.argv[2]
+add_parser = subparsers.add_parser("add", help="add a new transaction")
+add_parser.add_argument("amount", type=float, help="amount of money (also negative)")
+add_parser.add_argument( "-d", "--description",
+                    default="No description", 
+                    help="add a description to the transaction"
+                    )
+
+args = parser.parse_args()
+
+print(args)
 
 initialize_csv()
 
-match mode:
-    case "add":
-        add_money(amount) 
-        print(f"Added: {sys.argv[2]}")
+if args.command == "add":
+    add_money(args.amount, args.description) 
