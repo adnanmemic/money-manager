@@ -41,6 +41,15 @@ def remove_transaction(id):
     df = df[df["id"] != id] # to remove the row 
     df.to_csv(FILE_PATH, header=True, index=False)
 
+# Show the current balance
+def show_money():
+    df = pd.read_csv(FILE_PATH)
+    if df.empty:
+        print("No transactions yet!")
+        return
+    total = df["money"].sum()
+    print(f"Total: {total}")
+
 # Commands
 parser = argparse.ArgumentParser()
 subparsers = parser.add_subparsers(dest="command")
@@ -54,6 +63,8 @@ add_parser.add_argument( "-d", "--description",
 # Subcommand: remove
 remove_parser = subparsers.add_parser("remove", help="remove a transaction")
 remove_parser.add_argument("id", type=int, help="id of the transaction")
+# Subcommand: show
+total_parser = subparsers.add_parser("show", help="show total amount of money")
 
 args = parser.parse_args()
 
@@ -65,6 +76,8 @@ if args.command == "add":
     add_money(args.amount, args.description) 
 elif args.command == "remove":
     remove_transaction(args.id)
+elif args.command == "show":
+    show_money()
 else:
     parser.print_help()
     sys.exit(0)
