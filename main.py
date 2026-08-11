@@ -13,13 +13,13 @@ def initialize_csv():
         df.to_csv(FILE_PATH, header=True, index=False)
 
 # Add new entry
-def add_money(amount, description):
+def add_money(amount, t, description):
     df_csv = pd.read_csv(FILE_PATH)
     new_id = 1 if df_csv.empty else df_csv["id"].max() + 1
 
     df = pd.DataFrame([{
         "id": new_id,
-        "type": "bank", 
+        "type": t, 
         "amount": amount, 
         "date": date.today().isoformat(),
         "description": description
@@ -56,6 +56,7 @@ subparsers = parser.add_subparsers(dest="command")
 # Subcommand: add
 add_parser = subparsers.add_parser("add", help="add a new transaction")
 add_parser.add_argument("amount", type=float, help="amount of money (also negative)")
+add_parser.add_argument("-t", "--type", default="bank", help="where the money is held")
 add_parser.add_argument( "-d", "--description",
                     default="No description", 
                     help="add a description to the transaction"
@@ -73,7 +74,7 @@ print(args)
 initialize_csv()
 
 if args.command == "add":
-    add_money(args.amount, args.description) 
+    add_money(args.amount, args.type, args.description) 
 elif args.command == "remove":
     remove_transaction(args.id)
 elif args.command == "show":
