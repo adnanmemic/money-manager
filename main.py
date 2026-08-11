@@ -1,4 +1,5 @@
 import argparse
+import sys
 from pathlib import Path
 from datetime import date
 import pandas as pd
@@ -45,3 +46,6 @@ initialize_csv()
 
 if args.command == "add":
     add_money(args.amount, args.description) 
+else:
+    parser.print_help()
+    sys.exit(0)
