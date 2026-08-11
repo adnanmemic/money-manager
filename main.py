@@ -9,7 +9,7 @@ FILE_PATH = Path("data.csv")
 # Fileexistence check and file empty check
 def initialize_csv():
     if not FILE_PATH.is_file() or FILE_PATH.stat().st_size == 0:
-        df = pd.DataFrame(columns=["id", "account", "money", "date", "description"])
+        df = pd.DataFrame(columns=["id", "type", "amount", "date", "description"])
         df.to_csv(FILE_PATH, header=True, index=False)
 
 # Add new entry
@@ -19,8 +19,8 @@ def add_money(amount, description):
 
     df = pd.DataFrame([{
         "id": new_id,
-        "account": "bank", 
-        "money": amount, 
+        "type": "bank", 
+        "amount": amount, 
         "date": date.today().isoformat(),
         "description": description
     }])
